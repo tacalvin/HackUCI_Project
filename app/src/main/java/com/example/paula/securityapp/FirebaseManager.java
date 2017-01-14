@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONObject;
 
@@ -36,6 +37,7 @@ public class FirebaseManager {
 //        ID = tm.getDeviceId();
 
         //get ID eventually
+        //TODO get actual id eventually
         storage = FirebaseStorage.getInstance();
         ID = "101010";
     }
@@ -53,6 +55,7 @@ public class FirebaseManager {
             temp.put("Longitude", coordinates.first);
             temp.put("Latitude", coordinates.second);
             temp.put("Description" , description);
+            //maps user ID to json object
             userMap.put("User_"+ID,temp.toString());
             myref.setValue(userMap);
             return true;
@@ -61,13 +64,22 @@ public class FirebaseManager {
         {
             Log.v("Exception",e.toString());
         }
-        Log.v("BUG","Not uploading");
-        return true;
+//        Log.v("BUG","Not uploading");
+        return false;
     }
 
-    private boolean uploadPicture(Image selfie)
+    private boolean uploadPicture(String imgPath)
     {
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://hackuci-project.appspot.com");
 
+        StorageReference selfieRef = storageRef.child("userSelfie"+ID+".jpg");
+
+        StorageReference selfieImageRef = storageRef.child("images/userSelfie"+ID+".jpg");
+
+        selfieRef.getName().equals(selfieImageRef.getName());
+        selfieRef.getPath().equals(selfieImageRef.getPath());
+
+        //Approach depends on how image is passed through
 
         return true;
     }
