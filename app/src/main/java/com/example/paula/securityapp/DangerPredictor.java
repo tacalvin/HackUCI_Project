@@ -33,5 +33,6 @@ public class DangerPredictor {
     int checkDanger(Pair<String, String> coords) {
         standardQueryBuilder(coords);
         List<CrimeReport> crimeReports = handler.sendRequest();
+        return 0;
     }
 }
