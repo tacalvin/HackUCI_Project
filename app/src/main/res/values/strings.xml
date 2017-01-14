@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">SecurityApp</string>
     <string name="title_activity_maps">Map</string>
+    <string name="sf_open_url">https://data.sfgov.org/resource/cuks-n6tp.json</string>
 </resources>
