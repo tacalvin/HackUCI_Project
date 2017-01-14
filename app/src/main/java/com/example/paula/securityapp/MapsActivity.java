@@ -2,19 +2,19 @@ package com.example.paula.securityapp;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Environment;
-import android.support.v4.app.FragmentActivity;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.util.Pair;
+import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
+import info.hoang8f.widget.FButton;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     FirebaseManager fb;
@@ -35,12 +35,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
         fb = new FirebaseManager(getApplicationContext());
 
-        Button button = (Button) findViewById(R.id.button);
+        Typeface amatic = Typeface.createFromAsset(this.getAssets(), "fonts/AmaticSC-Regular.ttf");
+//        FButton broadcastButton = (FButton)findViewById(R.id.broadcastButton);
+
+        FButton button = (FButton) findViewById(R.id.button);
+
+        button.setTypeface(amatic);
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
@@ -57,9 +63,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-       
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.map);
 
         fb.uploadGPS(new android.util.Pair<String, String>("071","1"),"New Device ID LG");
 //        mapFragment.getMapAsync(this);
@@ -81,8 +87,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
         LatLng san_fran = new LatLng(37.7749, -122.4194);
-        mMap.addMarker(new MarkerOptions().position(san_fran).title("Marker in SF"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(san_fran));
+        mMap.addMarker(new MarkerOptions()
+                .position(san_fran)
+                .title("Marker in SF")
+                .snippet("Snippet")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.common_google_signin_btn_icon_dark_disabled)));
+        //add the selfie image here
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(san_fran,  14.0f));
     }
 
 

@@ -1,19 +1,48 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
+    android:id="@+id/container"
     android:name="com.google.android.gms.maps.SupportMapFragment"
+    xmlns:fbutton="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.paula.securityapp.MapsActivity"
     tools:layout="@layout/cast_help_text" >
 
-    <Button
-        android:text="Broadcast"
+    <fragment
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.paula.securityapp.MapsActivity" />
+
+    <info.hoang8f.widget.FButton
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/round_button"
+        android:text="Broadcast"
+        android:textSize="20sp"
+        android:textColor="@color/Black"
+        fbutton:buttonColor="@color/Gold"
+        fbutton:shadowColor="@color/white"
+        fbutton:shadowEnabled="true"
+        fbutton:shadowHeight="5dp"
+        fbutton:cornerRadius="5dp"
+        android:gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/button" />
+        android:layout_marginBottom="10dp"/>
+    <!--<Button-->
+    <!--android:text="Broadcast"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:id="@+id/button" />-->
+
 </RelativeLayout>
     <!--tools:layout="@layout/activity_maps" />-->
