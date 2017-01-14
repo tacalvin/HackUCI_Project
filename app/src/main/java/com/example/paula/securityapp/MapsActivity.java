@@ -36,29 +36,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
 //                .findFragmentById(R.id.map);
 //        mapFragment.getMapAsync(this);
+        final FirebaseManager fb = new FirebaseManager(getApplicationContext());
 
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                 startActivityForResult(intent, 1);
-                
-              try{
-                File file = createImageFile();
-              }
-              catch(IOException e)
-              {
-                Log.d("ERROR", "onCreate: IOEXCEPTION ");
-              }
+
+//              try{
+//                File file = createImageFile();
+//              }
+//              catch(IOException e)
+//              {
+//                Log.d("ERROR", "onCreate: IOEXCEPTION ");
+//              }
+                fb.uploadPicture(mImageView);
             }
         });
 
        
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        FirebaseManager fb = new FirebaseManager(getApplicationContext());
+
         fb.uploadGPS(new android.util.Pair<String, String>("071","1"),"New Device ID LG");
-        mapFragment.getMapAsync(this);
+//        mapFragment.getMapAsync(this);
     }
 
 
@@ -86,6 +88,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //get url of photo saved.
+        Log.e("onActivityResult","Made it");
         if (requestCode == 0 && resultCode == RESULT_OK) {
             // URI uri = data.getData();
 

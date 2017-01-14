@@ -16,4 +16,4 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/button" />
 </RelativeLayout>
-    tools:layout="@layout/activity_maps" />
+    <!--tools:layout="@layout/activity_maps" />-->

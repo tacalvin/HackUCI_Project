@@ -1,12 +1,15 @@
 package com.example.paula.securityapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.media.Image;
+import android.net.Uri;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.Pair;
+import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -15,9 +18,11 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,7 +78,7 @@ public class FirebaseManager {
         return false;
     }
 
-    private boolean uploadPicture(String imgPath)
+    boolean uploadPicture(ImageView img)
     {
         StorageReference storageRef = storage.getReferenceFromUrl("gs://hackuci-project.appspot.com");
 
@@ -84,6 +89,27 @@ public class FirebaseManager {
         selfieRef.getName().equals(selfieImageRef.getName());
         selfieRef.getPath().equals(selfieImageRef.getPath());
 
+        ImageView imageView = img;
+        imageView.setDrawingCacheEnabled(true);
+        imageView.buildDrawingCache();
+        Bitmap bitmap = imageView.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = selfieRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+            }
+        });
         //Approach depends on how image is passed through
 
         return true;
