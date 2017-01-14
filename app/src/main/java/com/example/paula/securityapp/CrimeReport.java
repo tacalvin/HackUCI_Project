@@ -16,12 +16,12 @@ import java.util.List;
 public class CrimeReport {
     public static final GenericType<List<CrimeReport>> LIST_TYPE = new GenericType<List<CrimeReport>>() {};
 
-    String category;
-    String date;
-    String dayofweek;
-    double x;
-    double y;
-    String time;
+    private String category;
+    private String date;
+    private String dayofweek;
+    private double x;
+    private double y;
+    private String time;
 
     @JsonCreator
     public CrimeReport(@JsonProperty("category") String category,
