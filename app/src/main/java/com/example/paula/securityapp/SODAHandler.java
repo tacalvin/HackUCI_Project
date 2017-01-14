@@ -57,7 +57,7 @@ public class SODAHandler {
 
     void addOrderByPhraseDesc(String nominee) {
         try {
-            userQueryBuilder.addOrderByPhrase(new OrderByClause(SortOrder.Descending, "position"));
+            userQueryBuilder.addOrderByPhrase(new OrderByClause(SortOrder.Descending, nominee));
         } catch (Exception e) {
             exceptionCatcher(e);
         }
