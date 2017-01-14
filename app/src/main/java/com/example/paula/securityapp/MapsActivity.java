@@ -17,11 +17,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        FirebaseManager fb = new FirebaseManager(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        FirebaseManager fb = new FirebaseManager(getApplicationContext());
+        fb.uploadGPS(new android.util.Pair<String, String>("071","1"),"New Device ID LG");
         mapFragment.getMapAsync(this);
     }
 
