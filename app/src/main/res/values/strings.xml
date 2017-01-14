@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">SecurityApp</string>
     <string name="title_activity_maps">Map</string>
+    <string name="pref_distance">Distance</string>
+    <string name="pref_distance_dialog">Distance to search</string>
+    <string name="pref_distance_default">1.5</string>
+    <string name="pref_display_max">Display limit</string>
+    <string name="pref_display_max_dialog">Maximum amount of broadcasters</string>
+    <string name="pref_display_max_default">100</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
