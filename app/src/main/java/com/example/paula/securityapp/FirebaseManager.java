@@ -78,7 +78,7 @@ public class FirebaseManager {
         return false;
     }
 
-    boolean uploadPicture(ImageView img)
+    boolean uploadPicture(Bitmap bitmap)
     {
         StorageReference storageRef = storage.getReferenceFromUrl("gs://hackuci-project.appspot.com");
 
@@ -89,10 +89,12 @@ public class FirebaseManager {
         selfieRef.getName().equals(selfieImageRef.getName());
         selfieRef.getPath().equals(selfieImageRef.getPath());
 
-        ImageView imageView = img;
-        imageView.setDrawingCacheEnabled(true);
-        imageView.buildDrawingCache();
-        Bitmap bitmap = imageView.getDrawingCache();
+//        ImageView imageView = img;
+//        imageView.setDrawingCacheEnabled(true);
+//        imageView.buildDrawingCache();
+//        Bitmap bitmap = (imageView.getDrawable()).get;
+        if(bitmap == null)
+            Log.v("bitmap is null","null again");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();

@@ -90,15 +90,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //get url of photo saved.
+        mImageView = new ImageView(getApplicationContext());
         Log.v("RequestCode",requestCode+"");
         if (requestCode == 1 && resultCode == RESULT_OK) {
             // URI uri = data.getData();
             Log.e("onActivityResult","Made it");
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-
+            if(imageBitmap == null)
+            {
+                Log.v("NULLSHIT","ITs null guys");
+            }
             mImageView.setImageBitmap(imageBitmap);
-            fb.uploadPicture(mImageView);
+            fb.uploadPicture(imageBitmap);
         }
     }
 
