@@ -2,6 +2,7 @@ package com.example.paula.securityapp;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.provider.Settings;
@@ -40,13 +41,7 @@ public class FirebaseManager {
     FirebaseManager(Context context)
     {
         db = FirebaseDatabase.getInstance();
-        DatabaseReference myref = db.getReference("message");
-        myref.setValue("Hello");
-//        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-//        ID = tm.getDeviceId();
-
         //get ID eventually
-        //TODO get actual id eventually
         storage = FirebaseStorage.getInstance();
         retrieveImages();
         ID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -119,10 +114,10 @@ public class FirebaseManager {
         return true;
     }
 
-    ArrayList<Image>  retrieveImages()
+    ArrayList<Bitmap>  retrieveImages()
     {
         //should retrive gps coordinates than find image IDs
-        ArrayList<Image> images = new ArrayList<>();
+        final ArrayList<Bitmap> images = new ArrayList<>();
         // Create a storage reference from our app
 //        StorageReference storageRef = storage.getReferenceFromUrl("gs://hackuci-project.appspot.com");
 
@@ -139,6 +134,8 @@ public class FirebaseManager {
         gsReference.getBytes(MAX_SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
+                Bitmap img = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                images.add(img);
                 Log.v("Download Complete","DOWNLOAD COMPLETE");
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -150,14 +147,19 @@ public class FirebaseManager {
         return images;
     }
 
-    ArrayList<Pair<String,String>>  retrieveGPS()
+    public ArrayList<Pair<String,String>>  retrieveGPS()
     {
         ArrayList<Pair<String,String>> coordinates = new ArrayList<>();
+
 
         return coordinates;
     }
 
 
 
-//    boolean broa
+    public boolean broadcast(Bitmap img, String longitude, String lattitude)
+    {
+        return uploadPicture(img) && uploadGPS(new Pair<String, String>(longitude,lattitude),lattitude);
+
+    }
 }
