@@ -1,17 +1,14 @@
 package com.example.paula.securityapp;
 
-import android.util.Pair;
-
 import com.socrata.api.Soda2Consumer;
 import com.socrata.builders.SoqlQueryBuilder;
 import com.socrata.model.soql.OrderByClause;
-import com.socrata.model.soql.SoqlQuery;
 import com.socrata.model.soql.SortOrder;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
+import java.util.List;
 
 /**
  * Created by Explo on 1/14/2017.
@@ -71,5 +68,12 @@ public class SODAHandler {
         }
     }
 
-
+    List<CrimeReport> sendRequest() {
+        try {
+            return consumer.query("crimeReport", userQueryBuilder.build(), CrimeReport.LIST_TYPE);
+        } catch (Exception e) {
+            exceptionCatcher(e);
+        }
+        return null;
+    }
 }
