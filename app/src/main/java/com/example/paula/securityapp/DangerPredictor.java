@@ -2,6 +2,8 @@ package com.example.paula.securityapp;
 
 import android.util.Pair;
 
+import java.util.List;
+
 /**
  * Created by Explo on 1/14/2017.
  */
@@ -18,7 +20,18 @@ public class DangerPredictor {
         handler = new SODAHandler();
     }
 
-    int checkDanger(Pair<String, String> coords) {
+    private void standardQueryBuilder(Pair<String, String> coords) {
+        StringBuilder stringBuilder = new StringBuilder("within_circle(location,");
+        stringBuilder.append(coords.first);
+        stringBuilder.append(',');
+        stringBuilder.append(coords.second);
+        handler.setWhereClause(stringBuilder.toString());
+        handler.addOrderByPhraseDesc("date");
+        handler.setLimit(300);
+    }
 
+    int checkDanger(Pair<String, String> coords) {
+        standardQueryBuilder(coords);
+        List<CrimeReport> crimeReports = handler.sendRequest();
     }
 }

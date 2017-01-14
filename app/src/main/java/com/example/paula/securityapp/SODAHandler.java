@@ -60,6 +60,14 @@ public class SODAHandler {
         }
     }
 
+    void setLimit(int limit) {
+        try {
+            userQueryBuilder.setLimit(limit);
+        } catch (Exception e) {
+            exceptionCatcher(e);
+        }
+    }
+
     void resetPhrase() {
         try {
             userQueryBuilder = new SoqlQueryBuilder();
