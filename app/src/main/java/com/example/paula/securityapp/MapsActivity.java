@@ -23,10 +23,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
+    FirebaseManager fb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //        FirebaseManager fb = new FirebaseManager(getApplicationContext());
@@ -36,7 +38,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
 //                .findFragmentById(R.id.map);
 //        mapFragment.getMapAsync(this);
-        final FirebaseManager fb = new FirebaseManager(getApplicationContext());
+        fb = new FirebaseManager(getApplicationContext());
 
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +53,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //              {
 //                Log.d("ERROR", "onCreate: IOEXCEPTION ");
 //              }
-                fb.uploadPicture(mImageView);
+
             }
         });
 
@@ -88,13 +90,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //get url of photo saved.
-        Log.e("onActivityResult","Made it");
-        if (requestCode == 0 && resultCode == RESULT_OK) {
+        Log.v("RequestCode",requestCode+"");
+        if (requestCode == 1 && resultCode == RESULT_OK) {
             // URI uri = data.getData();
-
+            Log.e("onActivityResult","Made it");
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
+
             mImageView.setImageBitmap(imageBitmap);
+            fb.uploadPicture(mImageView);
         }
     }
 

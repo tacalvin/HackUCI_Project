@@ -102,11 +102,13 @@ public class FirebaseManager {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
+                Log.v("Did not upload","Failed to Upload");
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                Log.v("Uploading","Currently Uploading");
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
             }
         });
