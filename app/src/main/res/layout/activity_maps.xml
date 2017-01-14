@@ -24,8 +24,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/round_button"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="Broadcast"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:textColor="@color/Black"
         fbutton:buttonColor="@color/Gold"
         fbutton:shadowColor="@color/white"
@@ -36,13 +38,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"/>
-    <!--<Button-->
-    <!--android:text="Broadcast"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:id="@+id/button" />-->
+
 
 </RelativeLayout>
     <!--tools:layout="@layout/activity_maps" />-->

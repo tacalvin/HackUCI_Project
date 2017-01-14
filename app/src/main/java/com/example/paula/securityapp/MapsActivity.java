@@ -40,7 +40,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
         fb = new FirebaseManager(getApplicationContext());
 
-        Typeface amatic = Typeface.createFromAsset(this.getAssets(), "fonts/AmaticSC-Regular.ttf");
+        Typeface amatic = Typeface.createFromAsset(this.getAssets(), "fonts/Capture_it.ttf");
 //        FButton broadcastButton = (FButton)findViewById(R.id.broadcastButton);
 
         FButton button = (FButton) findViewById(R.id.button);
