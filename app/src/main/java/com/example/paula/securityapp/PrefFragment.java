@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
+/*
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link PreferenceFragment.OnFragmentInteractionListener} interface
@@ -20,17 +20,18 @@ import android.view.ViewGroup;
  * Use the {@link PreferenceFragment#} factory method to
  * create an instance of this fragment.
  */
-public class PreferenceFragment extends PreferenceFragmentCompat {
-    // TODO: Rename parameter arguments, choose names that match
+public class PrefFragment extends PreferenceFragmentCompat {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private EditTextPreference distanceEditTextPreference;
     private EditTextPreference displayEditTextPreference;
 
     //private OnFragmentInteractionListener mListener;
 
-    public PreferenceFragment() {
+    /**
+    public PrefFragment() {
         // Required empty public constructor
     }
+    */
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -47,9 +48,10 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+     */
 }

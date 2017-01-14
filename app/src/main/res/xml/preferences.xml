@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    android:title="Preferences"
+
     <EditTextPreference
         android:key="pref_distance"
         android:title="@string/pref_distance"
         android:dialogTitle="@string/pref_distance_dialog"
-        android:numeric="decimal"
+        android:inputType="numberDecimal"
+        android:background="#00FF00"
         android:defaultValue="@string/pref_distance_default" />
     <EditTextPreference
         android:key="pref_display_max"
         android:title="@string/pref_display_max"
         android:dialogTitle="@string/pref_display_max_dialog"
-        android:numeric="integer"
+        android:inputType="numberSigned"
+        android:background="#00FF00"
         android:defaultValue="@string/pref_display_max_default"
         />
 </PreferenceScreen>
