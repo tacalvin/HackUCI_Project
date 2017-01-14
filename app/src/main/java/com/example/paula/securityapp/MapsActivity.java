@@ -27,7 +27,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Button prefButton = (Button) findViewById(R.id.prefButton);
         prefButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction()
+                getFragmentManager().beginTransaction()
                         .replace(android.R.id.content, new PrefFragment())
                         .commit();
             }

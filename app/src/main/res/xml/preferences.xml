@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <EditTextPreference
+    <com.vanniktech.vntnumberpickerpreference.VNTNumberPickerPreference
+        android:defaultValue="@string/pref_distance_default"
         android:key="pref_distance"
         android:title="@string/pref_distance"
-        android:dialogTitle="@string/pref_distance_dialog"
-        android:inputType="numberDecimal"
-        android:background="#00FF00"
-        android:defaultValue="@string/pref_distance_default" />
-    <EditTextPreference
+        app:vnt_maxValue="@integer/font_size_max_value1"
+        app:vnt_minValue="@integer/font_size_min_value1"
+        app:vnt_setWrapSelectorWheel="true"/>
+    <!---
+    <com.vanniktech.vntnumberpickerpreference.VNTNumberPickerPreference
         android:key="pref_display_max"
         android:title="@string/pref_display_max"
-        android:dialogTitle="@string/pref_display_max_dialog"
-        android:inputType="numberSigned"
-        android:background="#00FF00"
         android:defaultValue="@string/pref_display_max_default"
-        />
+        app:vnt_maxValue="@integer/font_size_max_value2"
+        app:vnt_minValue="@integer/font_size_min_value2"
+        app:vnt_setWrapSelectorWheel="true"/>
+        -->
 </PreferenceScreen>

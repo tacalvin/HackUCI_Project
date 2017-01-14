@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="font_size_max_value1">100</integer>
+    <integer name="font_size_min_value1">0</integer>
+    <integer name="font_size_max_value2">100</integer>
+    <integer name="font_size_min_value2">0</integer>
+
+</resources>
