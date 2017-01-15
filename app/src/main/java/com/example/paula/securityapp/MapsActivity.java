@@ -49,6 +49,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //        FirebaseManager fb = new FirebaseManager(getApplicationContext());
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -56,6 +57,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         fb = new FirebaseManager(getApplicationContext());
+
+        fb.retrieveGPSM();
 
         Typeface amatic = Typeface.createFromAsset(this.getAssets(), "fonts/Capture_it.ttf");
 //        FButton broadcastButton = (FButton)findViewById(R.id.broadcastButton);
@@ -252,6 +255,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Log.v("In uploading", "In MapsActivity");
 
                             fb.broadcast(imageBitmap, mLastLocation.getLongitude() + "", mLastLocation.getLatitude() + "");
+                        } else {
+                            Log.v("null", "at mLastLocation");
                         }
 //            fb.uploadPicture(imageBitmap);
             } catch (SecurityException e) {
