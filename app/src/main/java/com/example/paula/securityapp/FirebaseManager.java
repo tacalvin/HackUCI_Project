@@ -208,7 +208,7 @@ public class FirebaseManager {
         */
         return null;
     }
-
+    //a
     public void removeEntry() {
         try {
             db.getReference().getRoot().child(ID).removeValue();
