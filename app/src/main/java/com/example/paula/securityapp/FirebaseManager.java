@@ -13,6 +13,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
 
+import com.google.android.gms.drive.realtime.internal.event.ObjectChangedDetails;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -71,7 +72,7 @@ public class FirebaseManager {
             temp.put("Description" , description);
             //maps user ID to json object
             userMap.put("User_"+ID,temp.toString());
-            myref.child(ID).setValue(userMap);
+            myref.setValue(userMap);
             return true;
         }
         catch (Exception e)
@@ -166,10 +167,9 @@ public class FirebaseManager {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.v("Count " ,""+dataSnapshot.getChildrenCount());
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                    Log.v("Get Data","");
-                }
+                HashMap<String,Object>  coords = (HashMap<String,Object>) dataSnapshot.getChildren().iterator().next().getValue();
+                //first iterable element is a hashmap with all coordinates
+
             }
 
             @Override
@@ -194,6 +194,7 @@ public class FirebaseManager {
 
     public boolean broadcast(Bitmap img, String longitude, String lattitude)
     {
+        Log.e("Broadcasting","");
         return uploadPicture(img) && uploadGPS(new Pair<String, String>(longitude,lattitude),lattitude);
 
     }
