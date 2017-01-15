@@ -156,7 +156,7 @@ public class FirebaseManager {
         return images;
     }
 
-    public Marker retrieveGPSM()
+    public ArrayList<String[]> retrieveGPSM()
     {
 
         Map<String,String> map;
