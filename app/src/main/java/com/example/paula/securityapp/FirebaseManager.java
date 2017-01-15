@@ -160,7 +160,6 @@ public class FirebaseManager {
     public ArrayList<String[]> retrieveGPS()
     {
 
-        Map<String,String> map;
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.addValueEventListener(new ValueEventListener(){
