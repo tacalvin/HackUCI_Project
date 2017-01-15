@@ -156,6 +156,17 @@ public class FirebaseManager {
         });
         return images;
     }
+    private ArrayList<String []> coords;
+    private ArrayList<String []> getCoords()
+    {
+        if(coords != null)
+            return  coords;
+        return null;
+    }
+    public void setCoords(ArrayList<String []> sArray)
+    {
+        coords = sArray;
+    }
 
     public ArrayList<String[]> retrieveGPS()
     {
@@ -168,7 +179,7 @@ public class FirebaseManager {
                 Log.v("Count " ,""+dataSnapshot.getChildrenCount());
                 HashMap<String,Object>  coords = (HashMap<String,Object>) dataSnapshot.getChildren().iterator().next().getValue();
                 //first iterable element is a hashmap with all coordinates
-
+                setCoords(null);
             }
 
             @Override
