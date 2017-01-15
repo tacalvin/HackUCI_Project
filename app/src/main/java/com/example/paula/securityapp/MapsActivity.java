@@ -189,6 +189,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .addApi(LocationServices.API)
                     .build();
         }
+        fb.retrieveGPS();
 
     }
 
@@ -266,15 +267,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     protected void onStart() {
-        final long period = 12000;
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                // do your task here
-                ArrayList<String[]> coords =  fb.retrieveGPS();
-
-            }
-        }, 0, period);
+//        final long period = 12000;
+//        new Timer().schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                // do your task here
+//                ArrayList<String[]> coords =  fb.retrieveGPS();
+//
+//            }
+//        }, 0, period);
         mGoogleApiClient.connect();
         super.onStart();
     }
