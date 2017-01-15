@@ -45,8 +45,13 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import info.hoang8f.widget.FButton;
 
@@ -63,6 +68,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     LocationRequest mLocationRequest;
 
     LatLng latLng;
+    HashMap<String, Marker> markerHashMap;
 
     SupportMapFragment mFragment;
     Marker currLocationMarker;
@@ -282,28 +288,93 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     protected void onStart() {
+        super.onStart();
+        markerHashMap = new HashMap<>();
         DatabaseReference mDatabase = fb.getDB().getReference();
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
              @Override
              public void onDataChange(DataSnapshot dataSnapshot) {
+                 Log.v("Count " ,""+dataSnapshot);
+                 HashMap<String,Object> coords = (HashMap<String,Object>) dataSnapshot.getChildren().iterator().next().getValue();
+                 ArrayList<String []> coordList = new ArrayList<String[]>();
+                 Iterator it = coords.entrySet().iterator();
+                 while (it.hasNext()) {
+                     Map.Entry pair = (Map.Entry)it.next();
+                     Log.e("Class",(String)pair.getValue());
+                     String line = (String)pair.getValue();
 
+                     Pattern p = Pattern.compile("\"([^\"]*)\"");
+                     Matcher m = p.matcher(line);
+                     int i = 1;
+                     int j =0;
+                     String [] s = new String[3];
+                     while (m.find()) {
+                         Log.e("Regex:", m.group());
+                         if(i %2 == 0)
+                         {
+                             s[j] = m.group();
+                             j++;
+                         }
+                         i++;
+                     }
+                     coordList.add(s);
+                     Marker newMarker = mMap.addMarker(new MarkerOptions()
+                             .position(new LatLng(Double.parseDouble(s[0].substring(1,s[0].length()-2)), Double.parseDouble(s[1].substring(1,s[1].length()-2))))
+                             .title("A User")
+                             .snippet(s[2])
+                     );
+                     if (newMarker == null)
+                        Log.v("IS NULL","AAA");
+                     markerHashMap.put((String) pair.getKey(), newMarker);
+                     it.remove(); // avoids a ConcurrentModificationException
+                 }
              }
 
              @Override
              public void onCancelled(DatabaseError databaseError) {
-
              }
         });
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String,Object> coords = (HashMap<String,Object>) dataSnapshot.getChildren().iterator().next().getValue();
+                ArrayList<String []> coordList = new ArrayList<String[]>();
+                Iterator it = coords.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry pair = (Map.Entry)it.next();
+                    Log.e("Class",(String)pair.getValue());
+                    String line = (String)pair.getValue();
 
+                    Pattern p = Pattern.compile("\"([^\"]*)\"");
+                    Matcher m = p.matcher(line);
+                    int i = 1;
+                    int j =0;
+                    String [] s = new String[3];
+                    while (m.find()) {
+                        Log.e("Regex:", m.group());
+                        if(i %2 == 0)
+                        {
+                            s[j] = m.group();
+                            j++;
+                        }
+                        i++;
+                    }
+                    coordList.add(s);
+
+                    markerHashMap.get((String)pair.getKey()).remove();
+                    Marker newMarker = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(Double.parseDouble(s[0].substring(1,s[0].length()-2)), Double.parseDouble(s[1].substring(1,s[1].length()-2))))
+                            .title("A User")
+                            .snippet(s[2])
+                    );
+                    markerHashMap.put((String)pair.getKey(), newMarker);
+                    it.remove(); // avoids a ConcurrentModificationException
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 

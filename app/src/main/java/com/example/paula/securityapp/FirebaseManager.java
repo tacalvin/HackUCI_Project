@@ -168,6 +168,7 @@ public class FirebaseManager {
 
     public ArrayList<String[]> retrieveGPS()
     {
+        /*
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.addValueEventListener(new ValueEventListener(){
             DataSnapshot dataSnapshot;
@@ -204,6 +205,8 @@ public class FirebaseManager {
                 //first iterable element is a hashmap with all coordinates
         });
         return coords;
+        */
+        return null;
     }
 
     public void removeEntry() {
