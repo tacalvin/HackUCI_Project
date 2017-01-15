@@ -156,7 +156,7 @@ public class FirebaseManager {
         return images;
     }
 
-    public ArrayList<String[]> retrieveGPSM()
+    public ArrayList<String[]> retrieveGPS()
     {
 
         Map<String,String> map;
@@ -182,14 +182,13 @@ public class FirebaseManager {
         return null;
     }
 
-    public ArrayList<Pair<String,String>>  retrieveGPS()
-    {
-        ArrayList<Pair<String,String>> coordinates = new ArrayList<>();
-
-
-        return coordinates;
+    public void removeEntry() {
+        try {
+            db.getReference().getRoot().child(ID).removeValue();
+        } catch (Exception e) {
+            Log.e("Exception caught: ", "Unable to remove entry");
+        }
     }
-
 
 
     public boolean broadcast(Bitmap img, String longitude, String lattitude)

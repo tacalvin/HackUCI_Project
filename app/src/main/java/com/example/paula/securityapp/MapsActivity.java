@@ -1,6 +1,5 @@
 package com.example.paula.securityapp;
 
-import android.*;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -61,7 +60,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
         fb = new FirebaseManager(getApplicationContext());
 
-        fb.retrieveGPSM();
+        fb.retrieveGPS();
 
 
         Typeface capture_it = Typeface.createFromAsset(this.getAssets(), "fonts/Capture_it.ttf");
@@ -242,6 +241,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     ImageView mImageView;
+
+    @Override
+    protected void onDestroy() {
+        fb.removeEntry();
+        super.onDestroy();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
