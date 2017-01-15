@@ -60,6 +60,10 @@ public class FirebaseManager {
         ID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID) ;
     }
 
+    public FirebaseDatabase getDB() {
+        return db;
+    }
+
     boolean uploadGPS(Pair<String,String> coordinates, String description)
     {
         //upload to firebase
@@ -164,6 +168,7 @@ public class FirebaseManager {
 
     public ArrayList<String[]> retrieveGPS()
     {
+        /*
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.addValueEventListener(new ValueEventListener(){
             DataSnapshot dataSnapshot;
@@ -200,8 +205,10 @@ public class FirebaseManager {
                 //first iterable element is a hashmap with all coordinates
         });
         return coords;
+        */
+        return null;
     }
-
+    //a
     public void removeEntry() {
         try {
             db.getReference().getRoot().child(ID).removeValue();
