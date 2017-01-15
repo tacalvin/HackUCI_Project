@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.google.android.gms.plus.PlusOneDummyView.TAG;
 
@@ -187,10 +189,30 @@ public class FirebaseManager {
                     Map.Entry pair = (Map.Entry)it.next();
 //                    System.out.println(pair.getKey() + " = " + pair.getValue());
                     Log.e("Class",(String)pair.getValue());
+                    String line = (String)pair.getValue();
+
+                    Pattern p = Pattern.compile("\"([^\"]*)\"");
+                    Matcher m = p.matcher(line);
+                    int i = 1;
+                    int j =0;
+                    String [] s = new String[3];
+                    while (m.find()) {
+                        Log.e("Regex:", m.group());
+                        if(i %2 == 0)
+                        {
+                            s[j] = m.group();
+                            j++;
+                        }
+                        i++;
+
+                    }
+
+
+                    coordList.add(s);
                     it.remove(); // avoids a ConcurrentModificationException
                 }
                 //first iterable element is a hashmap with all coordinates
-                setCoords(null);
+                setCoords(coordList);
             }
 
             @Override
