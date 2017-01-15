@@ -37,7 +37,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import info.hoang8f.widget.FButton;
 
@@ -70,7 +73,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
         fb = new FirebaseManager(getApplicationContext());
 
-        fb.retrieveGPS();
+//        fb.retrieveGPS();
 
 
         Typeface capture_it = Typeface.createFromAsset(this.getAssets(), "fonts/Capture_it.ttf");
@@ -119,6 +122,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 ActivityCompat.requestPermissions(this,
                         new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
@@ -237,6 +266,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     protected void onStart() {
+        final long period = 12000;
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                // do your task here
+                ArrayList<String[]> coords =  fb.retrieveGPS();
+
+            }
+        }, 0, period);
         mGoogleApiClient.connect();
         super.onStart();
     }
@@ -311,27 +349,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.v("RequestCode", requestCode + "");
         if (requestCode == 1 && resultCode == RESULT_OK) {
             // URI uri = data.getData();
-            Log.e("onActivityResult", "Made it");
+            Log.e("onActivityResult", "Made it111111");
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
 
 
             mImageView.setImageBitmap(imageBitmap);
 
-            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-
             try {
-               Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                                mGoogleApiClient);
+               Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                Log.w("In TRY","");
+                if(mLastLocation != null)
+                {
+                    Log.v("In uploading", "In MapsActivity");
 
-                        if (mLastLocation != null) {
-                            Log.v("In uploading", "In MapsActivity");
-
-                            fb.broadcast(imageBitmap, mLastLocation.getLongitude() + "", mLastLocation.getLatitude() + "");
-                        } else {
-                            Log.v("null", "at mLastLocation");
-                        }
+                    fb.broadcast(imageBitmap, mLastLocation.getLongitude() + "", mLastLocation.getLatitude() + "");
+                }
+                else
+                {
+                    Log.e("Error Location is null","");
+                }
 //            fb.uploadPicture(imageBitmap);
             } catch (SecurityException e) {
                 Log.v("Permision Errors", "No Permissions");
