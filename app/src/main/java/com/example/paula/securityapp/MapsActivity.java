@@ -45,6 +45,8 @@ import java.util.TimerTask;
 import info.hoang8f.widget.FButton;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -269,8 +271,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toast.makeText(this,"onConnectionSuspended",Toast.LENGTH_SHORT).show();
     }
 
-    private boolean isClose() {
-        //distance formula here
+    private boolean isClose(double x1, double y1) {
+        double x2 = currLocationMarker.getPosition().longitude;
+        double y2 = currLocationMarker.getPosition().latitude;
+
+        //return sqrt(pow(x2-x1,2) + pow(y2-y1,2)) <= 0.04347826086;
         return true;
     }
 
@@ -283,13 +288,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 ArrayList<String[]> coords = fb.retrieveGPS();
                 if (mMap != null) mMap.clear();
                 for (int i = 0; i < coords.size();i++) {
-                    //TODO add distance formula
-                    //log, lat, des
-                    mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(Double.parseDouble(coords.get(i)[0]), Double.parseDouble(coords.get(i)[1])))
-                            .title("A User")
-                            .snippet(coords.get(i)[2])
-                    );
+                    //order: log, lat, des
+                    if (isClose(Double.parseDouble(coords.get(i)[0]), Double.parseDouble(coords.get(i)[1]))) {
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(Double.parseDouble(coords.get(i)[0]), Double.parseDouble(coords.get(i)[1])))
+                                .title("A User")
+                                .snippet(coords.get(i)[2])
+                        );
+                    }
                 }
             }
         }, 0, period);
