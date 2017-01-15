@@ -35,6 +35,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import static com.google.android.gms.plus.PlusOneDummyView.TAG;
@@ -54,7 +55,7 @@ public class FirebaseManager {
         //get ID eventually
         storage = FirebaseStorage.getInstance();
         retrieveImages();
-        ID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        ID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID) ;
     }
 
     boolean uploadGPS(Pair<String,String> coordinates, String description)
@@ -177,7 +178,17 @@ public class FirebaseManager {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.v("Count " ,""+dataSnapshot.getChildrenCount());
+                if(dataSnapshot.getChildrenCount() <= 0)
+                    return;
                 HashMap<String,Object>  coords = (HashMap<String,Object>) dataSnapshot.getChildren().iterator().next().getValue();
+                ArrayList<String []> coordList = new ArrayList<String[]>();
+                Iterator it = coords.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry pair = (Map.Entry)it.next();
+//                    System.out.println(pair.getKey() + " = " + pair.getValue());
+                    Log.e("Class",(String)pair.getValue());
+                    it.remove(); // avoids a ConcurrentModificationException
+                }
                 //first iterable element is a hashmap with all coordinates
                 setCoords(null);
             }
