@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -33,14 +34,23 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import info.hoang8f.widget.FButton;
 
@@ -57,6 +67,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     LocationRequest mLocationRequest;
 
     LatLng latLng;
+    HashMap<String, Marker> markerList;
 
     SupportMapFragment mFragment;
     Marker currLocationMarker;
@@ -276,25 +287,100 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     protected void onStart() {
+        DatabaseReference mDatabase = fb.getDB();
+        String ID = Settings.Secure.getString(Context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        // single use listener to initialize values
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+             @Override
+             public void onDataChange(DataSnapshot snapshot) {
+                 HashMap<String,Object>  coords = (HashMap<String,Object>) snapshot.getChildren().iterator().next().getValue();
+                 ArrayList<String []> coordList = new ArrayList<String[]>();
+                 Iterator it = coords.entrySet().iterator();
+                 while (it.hasNext()) {
+                     Map.Entry pair = (Map.Entry)it.next();
+//                    System.out.println(pair.getKey() + " = " + pair.getValue());
+                     Log.e("Class",(String)pair.getValue());
+                     String line = (String)pair.getValue();
+
+                     Pattern p = Pattern.compile("\"([^\"]*)\"");
+                     Matcher m = p.matcher(line);
+                     int i = 1;
+                     int j =0;
+                     String [] s = new String[3];
+                     while (m.find()) {
+                         Log.e("Regex:", m.group());
+                         if(i %2 == 0)
+                         {
+                             s[j] = m.group();
+                             j++;
+                         }
+                         i++;
+                     }
+
+
+                     coordList.add(s);
+                     it.remove(); // avoids a ConcurrentModificationException
+                 }
+
+                 markerList = new HashMap<String, Marker>();
+
+                 for (int i = 0; i < coordList.size() && coords != null; i++) {
+                     //if (isClose(Double.parseDouble(coordList.get(i)[0]), Double.parseDouble(coordList.get(i)[1]))) {
+                         mMap.addMarker(new MarkerOptions()
+                                 .position(new LatLng(Double.parseDouble(coordList.get(i)[0]), Double.parseDouble(coordList.get(i)[1])))
+                                 .title("A User")
+                                 .snippet(coordList.get(i)[2])
+                         );
+                     //}
+                 }
+             }
+
+            @Override
+            public void onCanceled(DatabaseError error) {
+            }
+        });
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        //
+
+        /*
         final long period = 10000;
-        new Timer().schedule(new TimerTask() {
+        Timer t = new Timer();
+            t.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                // do your task here
-                ArrayList<String[]> coords = fb.retrieveGPS();
-                if (mMap != null) mMap.clear();
-                for (int i = 0; i < coords.size();i++) {
-                    //order: log, lat, des
-                    if (isClose(Double.parseDouble(coords.get(i)[0]), Double.parseDouble(coords.get(i)[1]))) {
-                        mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(Double.parseDouble(coords.get(i)[0]), Double.parseDouble(coords.get(i)[1])))
-                                .title("A User")
-                                .snippet(coords.get(i)[2])
-                        );
+                runOnUiThread(new Runnable() {
+                    // do your task here
+                    public void run() {
+                        ArrayList<String[]> coords = fb.retrieveGPS();
+                        if (mMap != null) mMap.clear();
+                        if (coords != null) {
+                            for (int i = 0; i < coords.size(); i++) {
+                                //order: log, lat, des
+                                if (isClose(Double.parseDouble(coords.get(i)[0]), Double.parseDouble(coords.get(i)[1]))) {
+                                    mMap.addMarker(new MarkerOptions()
+                                            .position(new LatLng(Double.parseDouble(coords.get(i)[0]), Double.parseDouble(coords.get(i)[1])))
+                                            .title("A User")
+                                            .snippet(coords.get(i)[2])
+                                    );
+                                }
+                            }
+                        }
                     }
-                }
+                });
             }
         }, 0, period);
+        */
         mGoogleApiClient.connect();
         super.onStart();
     }
