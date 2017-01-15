@@ -197,7 +197,7 @@ public class FirebaseManager {
                     int j =0;
                     String [] s = new String[3];
                     while (m.find()) {
-                        Log.e("Regex:", m.group()+"!"+i);
+                        Log.e("Regex:", m.group());
                         if(i %2 == 0)
                         {
                             s[j] = m.group();
