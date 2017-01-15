@@ -11,7 +11,6 @@
 
     <fragment
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -28,8 +27,8 @@
         android:paddingRight="10dp"
         android:text="Broadcast"
         android:textSize="15sp"
-        android:textColor="@color/Black"
-        fbutton:buttonColor="@color/Gold"
+        android:textColor="@color/white"
+        fbutton:buttonColor="#cc0986ff"
         fbutton:shadowColor="@color/white"
         fbutton:shadowEnabled="true"
         fbutton:shadowHeight="5dp"

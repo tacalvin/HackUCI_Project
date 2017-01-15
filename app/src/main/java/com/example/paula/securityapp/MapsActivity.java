@@ -11,9 +11,11 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,7 +29,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -37,8 +38,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import info.hoang8f.widget.FButton;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
 
     private GoogleMap mMap;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 0;
@@ -60,12 +63,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         fb.retrieveGPSM();
 
-        Typeface amatic = Typeface.createFromAsset(this.getAssets(), "fonts/Capture_it.ttf");
-//        FButton broadcastButton = (FButton)findViewById(R.id.broadcastButton);
+
+        Typeface capture_it = Typeface.createFromAsset(this.getAssets(), "fonts/Capture_it.ttf");
+
+        //stashed
 
         FButton button = (FButton) findViewById(R.id.button);
 
-        button.setTypeface(amatic);
+        button.setTypeface(capture_it);
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -212,21 +217,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        } else {
+            // Show rationale and request permission.
+        }
 
         // Add a marker in Sydney and move the camera
         LatLng san_fran = new LatLng(37.7749, -122.4194);
         mMap.addMarker(new MarkerOptions()
                 .position(san_fran)
                 .title("Marker in SF")
-                .snippet("Snippet")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.common_google_signin_btn_icon_dark_disabled)));
+                .snippet("Snippet"));
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.common_google_signin_btn_icon_dark_disabled)));
         //add the selfie image here
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(san_fran, 14.0f));
     }
-
 
     ImageView mImageView;
 
