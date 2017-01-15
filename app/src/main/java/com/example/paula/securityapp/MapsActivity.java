@@ -281,8 +281,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void run() {
                 // do your task here
-                fb.retrieveGPS();
-                ArrayList<String[]> coords = fb.getCoords();
+                ArrayList<String[]> coords = fb.retrieveGPS();
                 if (mMap != null) mMap.clear();
                 for (int i = 0; i < coords.size();i++) {
                     //order: log, lat, des

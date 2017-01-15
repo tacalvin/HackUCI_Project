@@ -159,70 +159,47 @@ public class FirebaseManager {
         });
         return images;
     }
+
     private ArrayList<String []> coords;
-    public ArrayList<String []> getCoords()
-    {
-        if(coords != null)
-            return  coords;
-        return null;
-    }
-    public void setCoords(ArrayList<String []> sArray)
-    {
-        coords = sArray;
-    }
 
     public ArrayList<String[]> retrieveGPS()
     {
-
-
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.addValueEventListener(new ValueEventListener(){
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.v("Count " ,""+dataSnapshot.getChildrenCount());
-                if(dataSnapshot.getChildrenCount() <= 0)
-                    return;
-                HashMap<String,Object>  coords = (HashMap<String,Object>) dataSnapshot.getChildren().iterator().next().getValue();
-                ArrayList<String []> coordList = new ArrayList<String[]>();
-                Iterator it = coords.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry pair = (Map.Entry)it.next();
-//                    System.out.println(pair.getKey() + " = " + pair.getValue());
-                    Log.e("Class",(String)pair.getValue());
-                    String line = (String)pair.getValue();
+            DataSnapshot dataSnapshot;
+            Log.v("Count " ,""+dataSnapshot);
+            HashMap<String,Object>  coords = (HashMap<String,Object>) dataSnapshot.getChildren().iterator().next().getValue();
+            ArrayList<String []> coordList = new ArrayList<String[]>();
+            Iterator it = coords.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+//              System.out.println(pair.getKey() + " = " + pair.getValue());
+                Log.e("Class",(String)pair.getValue());
+                String line = (String)pair.getValue();
 
-                    Pattern p = Pattern.compile("\"([^\"]*)\"");
-                    Matcher m = p.matcher(line);
-                    int i = 1;
-                    int j =0;
-                    String [] s = new String[3];
-                    while (m.find()) {
-                        Log.e("Regex:", m.group());
-                        if(i %2 == 0)
-                        {
-                            s[j] = m.group();
-                            j++;
-                        }
-                        i++;
-
+                Pattern p = Pattern.compile("\"([^\"]*)\"");
+                Matcher m = p.matcher(line);
+                int i = 1;
+                int j =0;
+                String [] s = new String[3];
+                while (m.find()) {
+                    Log.e("Regex:", m.group());
+                    if(i %2 == 0)
+                    {
+                        s[j] = m.group();
+                        j++;
                     }
+                    i++;
 
-
-                    coordList.add(s);
-                    it.remove(); // avoids a ConcurrentModificationException
                 }
-                //first iterable element is a hashmap with all coordinates
-                setCoords(coordList);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.v("The read failed: " ,"");
-                // ...
+
+                coordList.add(s);
+                it.remove(); // avoids a ConcurrentModificationException
             }
+                //first iterable element is a hashmap with all coordinates
         });
-        return null;
+        return coords;
     }
 
     public void removeEntry() {
