@@ -29,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
@@ -60,6 +61,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+        //listener for location
+        //TODO
+
         mapFragment.getMapAsync(this);
         fb = new FirebaseManager(getApplicationContext());
 
@@ -226,14 +231,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    private boolean isClose() {
+        //distance formula here
+        return true;
+    }
+
     protected void onStart() {
-        final long period = 12000;
+        final long period = 10000;
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 // do your task here
-                ArrayList<String[]> coords =  fb.retrieveGPS();
-
+                ArrayList<String[]> coords = fb.retrieveGPS();
+                if (mMap != null) mMap.clear();
+                for (int i = 0; i < coords.size();i++) {
+                    //TODO add distance formula
+                    //log, lat, des
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(Double.parseDouble(coords.get(i)[0]), Double.parseDouble(coords.get(i)[1])))
+                            .title("A User")
+                            .snippet(coords.get(i)[2])
+                    );
+                }
             }
         }, 0, period);
         mGoogleApiClient.connect();
