@@ -60,6 +60,10 @@ public class FirebaseManager {
         ID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID) ;
     }
 
+    public FirebaseDatabase getDB() {
+        return db;
+    }
+
     boolean uploadGPS(Pair<String,String> coordinates, String description)
     {
         //upload to firebase
