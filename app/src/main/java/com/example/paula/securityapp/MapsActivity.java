@@ -1,13 +1,11 @@
 package com.example.paula.securityapp;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -29,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -37,16 +36,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import info.hoang8f.widget.FButton;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -60,6 +54,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     SupportMapFragment mFragment;
     Marker currLocationMarker;
+    Location mLastLocation;
 
     FirebaseManager fb;
 
@@ -239,8 +234,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+
         if (mLastLocation != null) {
             //place marker at current position
             mMap.clear();
@@ -248,7 +242,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);
             markerOptions.title("Your Current Position");
-            currLocationMarker = mMap.addMarker(markerOptions);
+
+    //            double latlngDouble = Double.parseDouble(latLng.latitude);
+    //
+    //            markerOptions.snippet((latLng.latitude latLng.longitude))
+    //            currLocationMarker = mMap.addMarker(markerOptions);
+
+    //        CameraPosition cameraPosition = new CameraPosition.Builder()
+    //                .target(latLng).zoom(14).build();
+    //        mMap.animateCamera(CameraUpdateFactory
+    //                .newCameraPosition(cameraPosition));
+
         }
 
         mLocationRequest = new LocationRequest();
@@ -277,24 +281,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     protected void onStart() {
         final long period = 10000;
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                // do your task here
-                ArrayList<String[]> coords = fb.retrieveGPS();
-                if (mMap != null) mMap.clear();
-                for (int i = 0; i < coords.size();i++) {
-                    //order: log, lat, des
-                    if (isClose(Double.parseDouble(coords.get(i)[0]), Double.parseDouble(coords.get(i)[1]))) {
-                        mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(Double.parseDouble(coords.get(i)[0]), Double.parseDouble(coords.get(i)[1])))
-                                .title("A User")
-                                .snippet(coords.get(i)[2])
-                        );
-                    }
-                }
-            }
-        }, 0, period);
+//        new Timer().schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                // do your task here
+//                ArrayList<String[]> coords = fb.retrieveGPS();
+//                if (mMap != null) mMap.clear();
+//                for (int i = 0; i < coords.size();i++) {
+//                    //order: log, lat, des
+//                    if (isClose(Double.parseDouble(coords.get(i)[0]), Double.parseDouble(coords.get(i)[1]))) {
+//                        mMap.addMarker(new MarkerOptions()
+//                                .position(new LatLng(Double.parseDouble(coords.get(i)[0]), Double.parseDouble(coords.get(i)[1])))
+//                                .title("A User")
+//                                .snippet(coords.get(i)[2])
+//                        );
+//                    }
+//                }
+//            }
+//        }, 0, period);
         mGoogleApiClient.connect();
         super.onStart();
     }
@@ -315,14 +319,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         // Add a marker in Sydney and move the camera
-        LatLng san_fran = new LatLng(37.7749, -122.4194);
-        mMap.addMarker(new MarkerOptions()
-                .position(san_fran)
-                .title("Marker in SF")
-                .snippet("Snippet"));
-//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.common_google_signin_btn_icon_dark_disabled)));
-        //add the selfie image here
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(san_fran, 14.0f));
+//        LatLng san_fran = new LatLng(37.7749, -122.4194);
+//        mMap.addMarker(new MarkerOptions()
+//                .position(san_fran)
+//                .title("Marker in SF")
+//                .snippet("Snippet"));
+////                .icon(BitmapDescriptorFactory.fromResource(R.drawable.common_google_signin_btn_icon_dark_disabled)));
+//        //add the selfie image here
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(san_fran, 14.0f));
     }
     @Override
     public void onLocationChanged(Location location) {
@@ -333,11 +337,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             currLocationMarker.remove();
         }
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Your Current Position");
-//        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         currLocationMarker = mMap.addMarker(markerOptions);
+
+//        33.649042, 117.845234
+//        33.6523° N, 117.8341
+        //Demo Purpose Markers
+
+//        Toast.makeText(this,latLng.toString(),Toast.LENGTH_SHORT).show();
+        LatLng demo_latLng1 = new LatLng(location.getLatitude()+0.01, location.getLongitude()+0.01);
+        mMap.addMarker(new MarkerOptions()
+                .position(demo_latLng1)
+                .title("Calvin")
+                .snippet("Hi, I'm Calvin")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.calvin)));
+
+        LatLng demo_latLng2 = new LatLng(location.getLatitude()-0.01, location.getLongitude()-0.01);
+        mMap.addMarker(new MarkerOptions()
+                .position(demo_latLng2)
+                .title("Paul")
+                .snippet("Hi, I'm Paul")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.paul)));
+
+        LatLng demo_latLng3 = new LatLng(location.getLatitude()-0.005, location.getLongitude()+0.01);
+        mMap.addMarker(new MarkerOptions()
+                .position(demo_latLng3)
+                .title("Jerry")
+                .snippet("Hi, I'm Jerry")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.jerry)));
+
+        LatLng demo_latLng4 = new LatLng(location.getLatitude()+0.006, location.getLongitude()-0.003);
+        mMap.addMarker(new MarkerOptions()
+                .position(demo_latLng4)
+                .title("Ho-Ren")
+                .snippet("Hi, I'm Ho-Ren")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.horen)));
 
         Toast.makeText(this,"Location Changed",Toast.LENGTH_SHORT).show();
 
@@ -382,7 +419,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if(mLastLocation != null)
                 {
                     Log.v("In uploading", "In MapsActivity");
-
                     fb.broadcast(imageBitmap, mLastLocation.getLongitude() + "", mLastLocation.getLatitude() + "");
                 }
                 else
@@ -398,11 +434,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
-
-
-
-
-
     String mCurrentPhotoPath;
 
     private File createImageFile() throws IOException {

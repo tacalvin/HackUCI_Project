@@ -3,28 +3,16 @@ package com.example.paula.securityapp;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.Pair;
-import android.widget.ImageView;
 
-import com.google.android.gms.drive.realtime.internal.event.ObjectChangedDetails;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -32,15 +20,9 @@ import com.google.firebase.storage.UploadTask;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static com.google.android.gms.plus.PlusOneDummyView.TAG;
 
 /**
  * Created by cta on 1/14/17.
@@ -165,40 +147,40 @@ public class FirebaseManager {
     public ArrayList<String[]> retrieveGPS()
     {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.addValueEventListener(new ValueEventListener(){
-            DataSnapshot dataSnapshot;
-            Log.v("Count " ,""+dataSnapshot);
-            HashMap<String,Object>  coords = (HashMap<String,Object>) dataSnapshot.getChildren().iterator().next().getValue();
-            ArrayList<String []> coordList = new ArrayList<String[]>();
-            Iterator it = coords.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
-//              System.out.println(pair.getKey() + " = " + pair.getValue());
-                Log.e("Class",(String)pair.getValue());
-                String line = (String)pair.getValue();
-
-                Pattern p = Pattern.compile("\"([^\"]*)\"");
-                Matcher m = p.matcher(line);
-                int i = 1;
-                int j =0;
-                String [] s = new String[3];
-                while (m.find()) {
-                    Log.e("Regex:", m.group());
-                    if(i %2 == 0)
-                    {
-                        s[j] = m.group();
-                        j++;
-                    }
-                    i++;
-
-                }
-
-
-                coordList.add(s);
-                it.remove(); // avoids a ConcurrentModificationException
-            }
-                //first iterable element is a hashmap with all coordinates
-        });
+//        mDatabase.addValueEventListener(new ValueEventListener(){
+//            DataSnapshot dataSnapshot;
+//            Log.v("Count " ,""+dataSnapshot);
+//            HashMap<String,Object>  coords = (HashMap<String,Object>) dataSnapshot.getChildren().iterator().next().getValue();
+//            ArrayList<String []> coordList = new ArrayList<String[]>();
+//            Iterator it = coords.entrySet().iterator();
+//            while (it.hasNext()) {
+//                Map.Entry pair = (Map.Entry)it.next();
+////              System.out.println(pair.getKey() + " = " + pair.getValue());
+//                Log.e("Class",(String)pair.getValue());
+//                String line = (String)pair.getValue();
+//
+//                Pattern p = Pattern.compile("\"([^\"]*)\"");
+//                Matcher m = p.matcher(line);
+//                int i = 1;
+//                int j =0;
+//                String [] s = new String[3];
+//                while (m.find()) {
+//                    Log.e("Regex:", m.group());
+//                    if(i %2 == 0)
+//                    {
+//                        s[j] = m.group();
+//                        j++;
+//                    }
+//                    i++;
+//
+//                }
+//
+//
+//                coordList.add(s);
+//                it.remove(); // avoids a ConcurrentModificationException
+//            }
+//                //first iterable element is a hashmap with all coordinates
+//        });
         return coords;
     }
 
