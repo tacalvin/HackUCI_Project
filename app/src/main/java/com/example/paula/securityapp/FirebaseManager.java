@@ -160,7 +160,7 @@ public class FirebaseManager {
         return images;
     }
     private ArrayList<String []> coords;
-    private ArrayList<String []> getCoords()
+    public ArrayList<String []> getCoords()
     {
         if(coords != null)
             return  coords;
